@@ -4,8 +4,12 @@ import { useReactToPrint } from "react-to-print";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Bill } from "./Bill";
 
+let lastInvoiceDate = "";
+let count = 0;
+
 const PrintBill: FC = () => {
   const [billPayload, setBillPayload] = useState<Bill>();
+  const [billNumber, setBillNumber] = useState<string>("");
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -21,11 +25,13 @@ const PrintBill: FC = () => {
   const { bill } = location.state || { bill: null };
 
   const handleOnClickEdit = () => {
+    count -= 1;
     navigate("/", { state: { billPayload } });
   };
 
   useEffect(() => {
     try {
+      generateInvoiceNumber();
       if (bill != null) {
         setBillPayload(bill);
       }
@@ -34,24 +40,75 @@ const PrintBill: FC = () => {
     }
   }, [bill]);
 
+  const generateInvoiceNumber = () => {
+    const prefix = 'INV';
+    const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+    if (currentDate !== lastInvoiceDate) {
+      lastInvoiceDate = currentDate;
+      count = 1;
+    } else {
+      count += 1;
+    }
+    const formattedCount = count.toString().padStart(3, '0');
+    setBillNumber(`${prefix}-${currentDate}-${formattedCount}`);
+  };
+
+  const handleOnPrint = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    try {
+      if (bill === null || billPayload === undefined) return;
+      handlePrint();
+      navigate("/", {
+        state: {
+          customer: {
+            name: "",
+            address: "",
+            phone: "",
+          },
+          car_name: "",
+          car_number: "",
+          product_list: [
+            {
+              id: "",
+              product_name: "",
+              price: 0,
+              quantity: 0,
+            },
+          ],
+        },
+      });
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <div className="p-10">
       <div className="gap-5 flex">
         <button
           onClick={handleOnClickEdit}
+          disabled={!billPayload}
           className="text-white mb-2 bg-gray-500  font-medium rounded-lg text-sm px-5 py-2.5 text-center "
         >
           แก้ไข
         </button>
         <button
-          onClick={handlePrint}
+          onClick={handleOnPrint}
+          disabled={!billPayload}
           className="text-white mb-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           พิมพ์
         </button>
       </div>
 
-      <InvoiceTemplate bill={bill} forwardRef={componentRef} />
+      <InvoiceTemplate
+        bill={bill}
+        forwardRef={componentRef}
+        bill_number={billNumber}
+      />
     </div>
   );
 };
