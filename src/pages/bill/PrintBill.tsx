@@ -6,7 +6,6 @@ import { Bill} from "./Bill";
 
 const PrintBill: FC = () => {
   const [billPayload, setBillPayload] = useState<Bill>();
-  const [billNumber, setBillNumber] = useState<string>("");
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -88,7 +87,6 @@ const PrintBill: FC = () => {
       <InvoiceTemplate
         bill={bill}
         forwardRef={componentRef}
-        bill_number={billNumber}
       />
     </div>
   );
