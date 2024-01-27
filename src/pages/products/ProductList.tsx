@@ -9,11 +9,14 @@ import Spinner from "../../components/spinner/Spinner";
 
 const ProductList: FC = () => {
   const [productList, setProductList] = useState<Product[]>([]);
+  const [loading,setLoading] = useState<boolean>(false)
 
   const loadCustomerList = async () => {
     try {
+      setLoading(true)
       getAllProduct().then((res: Product[]) => {
         setProductList(res);
+        setLoading(false)
       });
     } catch (error) {
       console.log("error: ", error);
@@ -59,7 +62,7 @@ const ProductList: FC = () => {
           </button>
         </Link>
       </div>
-      {productList.length === 0 ? (
+      {loading ?  (
         <Spinner />
       ) : (
         <table className="border-collapse border border-slate-500 table-fixed w-full">

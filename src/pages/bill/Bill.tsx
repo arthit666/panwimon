@@ -6,6 +6,7 @@ import InputFilter from "../../components/inputFilter/InputFilter";
 import { getAllCustomer } from "../../service/customer";
 import { getAllProduct } from "../../service/product";
 import { v4 as uuidv4 } from "uuid";
+import Spinner from "../../components/spinner/Spinner";
 export interface Bill {
   customer: Customer;
   car_name: string;
@@ -26,6 +27,7 @@ const Bill: FC = () => {
   const { billPayload } = location.state || { billPayload: null };
   const [customerList, setCustomerList] = useState<Customer[]>([]);
   const [productList, setProductList] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [bill, setBill] = useState<Bill>({
     customer: {
       name: "",
@@ -46,11 +48,13 @@ const Bill: FC = () => {
 
   useEffect(() => {
     try {
+      setLoading(true);
       if (billPayload != null) {
         setBill(billPayload);
       }
       loadCustomerList();
       loadProductList();
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +109,6 @@ const Bill: FC = () => {
     const listBill = bill.product_list.filter(
       (product: Product) => product.product_name != ""
     );
-    
     navigate("/print", {
       state: { bill: { ...bill, product_list: listBill } },
     });
@@ -202,107 +205,113 @@ const Bill: FC = () => {
 
   return (
     <div className="p-10">
-      <p className="font-bold  text-2xl mb-5">สร้างบิล</p>
-      <div className="mb-5 border-b-2 border-slate-500 flex items-start justify-start gap-10 ">
+      {loading ? (
+        <Spinner />
+      ) : (
         <div>
-          <div className="mb-5 w-96">
-            <InputFilter
-              value={bill.customer.name}
-              onSearch={handleSearch}
-              customerList={customerList}
-            />
+          <p className="font-bold  text-2xl mb-5">สร้างบิล</p>
+          <div className="mb-5 border-b-2 border-slate-500 flex items-start justify-start gap-10 ">
+            <div>
+              <div className="mb-5 w-96">
+                <InputFilter
+                  value={bill.customer.name}
+                  onSearch={handleSearch}
+                  customerList={customerList}
+                />
+              </div>
+
+              <label
+                form="adress"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                ที่อยู่ลูกค้า
+              </label>
+              <textarea
+                name="address"
+                rows={4}
+                value={bill.customer.address}
+                onChange={handleOnChangeCustomer}
+                className="block p-2.5 w-full text-sm mb-5 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+              <div className="mb-5">
+                <label
+                  form="phone"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  เบอร์โทร
+                </label>
+                <input
+                  type="phone"
+                  name="phone"
+                  value={bill.customer.phone}
+                  onChange={handleOnChangeCustomer}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                />
+              </div>
+              <button
+                onClick={handleOnClickAddProduct}
+                className="text-white mb-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                + เพิ่มสินค้า
+              </button>
+            </div>
+            <div>
+              <div className="mb-5 w-96">
+                <label
+                  form="truck_name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  ชื่อรถ
+                </label>
+                <input
+                  type="text"
+                  name="car_name"
+                  value={bill.car_name}
+                  onChange={handleOnChangeCar}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                />
+              </div>
+
+              <div className="mb-5 w-96">
+                <label
+                  form="truck_name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  เลขทะเบียนรถ
+                </label>
+                <input
+                  type="text"
+                  name="car_number"
+                  value={bill.car_number}
+                  onChange={handleOnChangeCar}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                />
+              </div>
+            </div>
           </div>
 
-          <label
-            form="adress"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            ที่อยู่ลูกค้า
-          </label>
-          <textarea
-            name="address"
-            rows={4}
-            value={bill.customer.address}
-            onChange={handleOnChangeCustomer}
-            className="block p-2.5 w-full text-sm mb-5 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          ></textarea>
-          <div className="mb-5">
-            <label
-              form="phone"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              เบอร์โทร
-            </label>
-            <input
-              type="phone"
-              name="phone"
-              value={bill.customer.phone}
-              onChange={handleOnChangeCustomer}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            />
+          <div className="mb-5 pb-4 border-b-2 border-slate-500 ">
+            {bill.product_list.map((product: Product, index: number) => (
+              <ProductInput
+                key={uuidv4()}
+                product={product}
+                index={index}
+                product_list={productList}
+                onDeleteProduct={handleDeleteProduct}
+                onSelectedProduct={handleSelectProduct}
+                onChangeProduct={handleChangeProduct}
+              />
+            ))}
           </div>
+
           <button
-            onClick={handleOnClickAddProduct}
+            onClick={handleOnClickSummit}
             className="text-white mb-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            + เพิ่มสินค้า
+            สร้างบิล
           </button>
         </div>
-        <div>
-          <div className="mb-5 w-96">
-            <label
-              form="truck_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              ชื่อรถ
-            </label>
-            <input
-              type="text"
-              name="car_name"
-              value={bill.car_name}
-              onChange={handleOnChangeCar}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            />
-          </div>
-
-          <div className="mb-5 w-96">
-            <label
-              form="truck_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              เลขทะเบียนรถ
-            </label>
-            <input
-              type="text"
-              name="car_number"
-              value={bill.car_number}
-              onChange={handleOnChangeCar}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-5 pb-4 border-b-2 border-slate-500 ">
-        {bill.product_list.map((product: Product, index: number) => (
-          <ProductInput
-            key={uuidv4()}
-            product={product}
-            index={index}
-            product_list={productList}
-            onDeleteProduct={handleDeleteProduct}
-            onSelectedProduct={handleSelectProduct}
-            onChangeProduct={handleChangeProduct}
-          />
-        ))}
-      </div>
-
-      <button
-        onClick={handleOnClickSummit}
-        className="text-white mb-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        สร้างบิล
-      </button>
+      )}
     </div>
   );
 };
