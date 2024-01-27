@@ -6,10 +6,9 @@ import { getCurrentDateTimeFormatted } from "../../utils/DateTime";
 interface IInvoice {
   forwardRef: RefObject<HTMLDivElement>;
   bill: Bill;
-  bill_number: string
 }
 
-const InvoiceTemplate: FC<IInvoice> = ({ forwardRef, bill, bill_number }) => {
+const InvoiceTemplate: FC<IInvoice> = ({ forwardRef, bill }) => {
   const [sumPrice, setSumPrice] = useState(0);
 
   useEffect(() => {
@@ -29,9 +28,8 @@ const InvoiceTemplate: FC<IInvoice> = ({ forwardRef, bill, bill_number }) => {
             <img alt="panwimon" src={logo} />
           </div>
           <div className="text-2xl">ใบส่งของ</div>
-          <div>เลขที่ใบส่งของ {bill_number}</div>
+          <div>เลขที่ใบส่งของ {bill.bill_number ?? ''}</div>
         </div>
-
         <div className="flex justify-between pb-1 border-b-2 px-2 mb-2 text-sm">
           <div>
             <div>ชื่อบริษัทลูกค้า {bill.customer.name}</div>

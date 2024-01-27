@@ -2,10 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import InvoiceTemplate from "../../components/invoiceTemplate/InvoiceTemplate";
 import { useReactToPrint } from "react-to-print";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Bill } from "./Bill";
-
-let lastInvoiceDate = "";
-let count = 0;
+import { Bill} from "./Bill";
 
 const PrintBill: FC = () => {
   const [billPayload, setBillPayload] = useState<Bill>();
@@ -25,13 +22,11 @@ const PrintBill: FC = () => {
   const { bill } = location.state || { bill: null };
 
   const handleOnClickEdit = () => {
-    count -= 1;
     navigate("/", { state: { billPayload } });
   };
 
   useEffect(() => {
     try {
-      generateInvoiceNumber();
       if (bill != null) {
         setBillPayload(bill);
       }
@@ -39,20 +34,6 @@ const PrintBill: FC = () => {
       console.log(error);
     }
   }, [bill]);
-
-  const generateInvoiceNumber = () => {
-    const prefix = 'INV';
-    const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-
-    if (currentDate !== lastInvoiceDate) {
-      lastInvoiceDate = currentDate;
-      count = 1;
-    } else {
-      count += 1;
-    }
-    const formattedCount = count.toString().padStart(3, '0');
-    setBillNumber(`${prefix}-${currentDate}-${formattedCount}`);
-  };
 
   const handleOnPrint = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

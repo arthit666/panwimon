@@ -82,7 +82,7 @@ const [loading,setLoading] = useState<boolean>(false)
       <div className="mb-5">
         <label
           form="product_name"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-white"
         >
           ชื่อสินค้า
         </label>
@@ -91,7 +91,7 @@ const [loading,setLoading] = useState<boolean>(false)
           name="product_name"
           value={product.product_name}
           onChange={handleOnChenge}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
           required
         />
       </div>
@@ -99,7 +99,7 @@ const [loading,setLoading] = useState<boolean>(false)
       <div className="mb-5">
         <label
           form="price"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-white"
         >
           ราคา/หน่วย
         </label>
@@ -108,7 +108,7 @@ const [loading,setLoading] = useState<boolean>(false)
           name="price"
           value={product.price}
           onChange={handleOnChenge}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
         />
       </div>
       <button

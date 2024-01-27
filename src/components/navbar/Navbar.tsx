@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png'
 const navbar: FC = () => {
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full  bg-gray-800 border-b  dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full  bg-gray-800 border-b border-gray-700">
         <div className="px-3  lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">

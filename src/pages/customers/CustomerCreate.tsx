@@ -20,7 +20,7 @@ const CustomerCreate: FC = () => {
     address: "",
     phone: "",
   });
-  const [loading,setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -46,7 +46,7 @@ const CustomerCreate: FC = () => {
   };
   const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
       if (item == null) {
         await createCustomer(customer);
@@ -75,13 +75,13 @@ const CustomerCreate: FC = () => {
           transition: Bounce,
         });
       }
-      setLoading(false)
+      setLoading(false);
       navigate("/customers");
     } catch (error) {
       console.log("Error:", error);
     }
   };
- 
+
   return (
     <div className="p-10">
       <p className="font-bold  text-2xl">เพิ่มลูกค้า</p>
@@ -89,7 +89,7 @@ const CustomerCreate: FC = () => {
         <div className="mb-5">
           <label
             form="name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-white"
           >
             ชื่อลูกค้า
           </label>
@@ -98,28 +98,30 @@ const CustomerCreate: FC = () => {
             name="name"
             value={customer.name}
             onChange={handleOnChenge}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
             required
           />
         </div>
-        <label
-          form="adress"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          ที่อยู่ลูกค้า
-        </label>
-        <textarea
-          name="address"
-          value={customer.address}
-          rows={4}
-          onChange={handleOnChenge}
-          className="block p-2.5 w-full text-sm mb-5 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          required
-        ></textarea>
+        <div className="mb-5">
+          <label
+            form="adress"
+            className="block mb-2 text-sm font-medium text-white"
+          >
+            ที่อยู่ลูกค้า
+          </label>
+          <textarea
+            name="address"
+            value={customer.address}
+            rows={4}
+            onChange={handleOnChenge}
+            className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
+            required
+          ></textarea>
+        </div>
         <div className="mb-5">
           <label
             form="phone"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-white"
           >
             เบอร์โทร
           </label>
@@ -128,7 +130,7 @@ const CustomerCreate: FC = () => {
             name="phone"
             value={customer.phone}
             onChange={handleOnChenge}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
           />
         </div>
         <button

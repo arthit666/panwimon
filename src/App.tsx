@@ -16,7 +16,7 @@ const App: FC = () => {
     return (
       <div>
         <ToastContainer />
-        <div className=" bg-red-800">
+        <div className=" text-white">
           <Navbar />
           <SideBar />
           <div className="pt-20 fixed right-0 bottom-0 pl-64 h-full w-full overflow-y-auto  bg-gray-800 text-white pr-3 bg">

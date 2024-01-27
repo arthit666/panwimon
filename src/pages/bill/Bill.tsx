@@ -8,6 +8,7 @@ import { getAllProduct } from "../../service/product";
 import { v4 as uuidv4 } from "uuid";
 import Spinner from "../../components/spinner/Spinner";
 export interface Bill {
+  bill_number?: string;
   customer: Customer;
   car_name: string;
   car_number: string;
@@ -20,6 +21,9 @@ export interface Product {
   price: number;
   quantity?: number;
 }
+
+let lastInvoiceDate = "";
+let count = 0;
 
 const Bill: FC = () => {
   const navigate = useNavigate();
@@ -50,6 +54,7 @@ const Bill: FC = () => {
     try {
       setLoading(true);
       if (billPayload != null) {
+        count -= 1
         setBill(billPayload);
       }
       loadCustomerList();
@@ -58,7 +63,21 @@ const Bill: FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [billPayload]);
+  }, []);
+
+  const generateInvoiceNumber = () => {
+    const prefix = "INV";
+    const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+
+    if (currentDate !== lastInvoiceDate) {
+      lastInvoiceDate = currentDate;
+      count = 1;
+    } else {
+      count += 1;
+    }
+    const formattedCount = count.toString().padStart(3, "0");
+    return `${prefix}-${currentDate}-${formattedCount}`;
+  };
 
   const handleOnChangeCustomer = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -110,7 +129,13 @@ const Bill: FC = () => {
       (product: Product) => product.product_name != ""
     );
     navigate("/print", {
-      state: { bill: { ...bill, product_list: listBill } },
+      state: {
+        bill: {
+          ...bill,
+          bill_number: generateInvoiceNumber(),
+          product_list: listBill,
+        },
+      },
     });
   };
 
@@ -219,25 +244,20 @@ const Bill: FC = () => {
                   customerList={customerList}
                 />
               </div>
-
-              <label
-                form="adress"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                ที่อยู่ลูกค้า
-              </label>
-              <textarea
-                name="address"
-                rows={4}
-                value={bill.customer.address}
-                onChange={handleOnChangeCustomer}
-                className="block p-2.5 w-full text-sm mb-5 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              ></textarea>
               <div className="mb-5">
-                <label
-                  form="phone"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
+                <label form="adress" className="block mb-2 text-sm font-medium">
+                  ที่อยู่ลูกค้า
+                </label>
+                <textarea
+                  name="address"
+                  rows={4}
+                  value={bill.customer.address}
+                  onChange={handleOnChangeCustomer}
+                  className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
+                ></textarea>
+              </div>
+              <div className="mb-5">
+                <label form="phone" className="block mb-2 text-sm font-medium">
                   เบอร์โทร
                 </label>
                 <input
@@ -245,7 +265,7 @@ const Bill: FC = () => {
                   name="phone"
                   value={bill.customer.phone}
                   onChange={handleOnChangeCustomer}
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
                 />
               </div>
               <button
@@ -259,7 +279,7 @@ const Bill: FC = () => {
               <div className="mb-5 w-96">
                 <label
                   form="truck_name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium "
                 >
                   ชื่อรถ
                 </label>
@@ -268,14 +288,14 @@ const Bill: FC = () => {
                   name="car_name"
                   value={bill.car_name}
                   onChange={handleOnChangeCar}
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
                 />
               </div>
 
               <div className="mb-5 w-96">
                 <label
                   form="truck_name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium"
                 >
                   เลขทะเบียนรถ
                 </label>
@@ -284,7 +304,7 @@ const Bill: FC = () => {
                   name="car_number"
                   value={bill.car_number}
                   onChange={handleOnChangeCar}
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
                 />
               </div>
             </div>

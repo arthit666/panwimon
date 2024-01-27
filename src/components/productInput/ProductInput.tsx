@@ -24,7 +24,7 @@ const ProductInput: FC<ProductDetail> = ({
       <div className=" w-2/4">
         <label
           form="default"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-white"
         >
           สินค้ารายการที่ {index + 1}
         </label>
@@ -32,7 +32,7 @@ const ProductInput: FC<ProductDetail> = ({
           id="default"
           value={product.id}
           onChange={(e) => onSelectedProduct(index, e.target.value)}
-          className="bg-gray-50 border border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
         >
           <option value="">
             เลือกสินค้า
@@ -48,7 +48,7 @@ const ProductInput: FC<ProductDetail> = ({
       <div className=" w-1/4">
         <label
           form="price"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-white"
         >
           ราคา/หน่วย
         </label>
@@ -57,14 +57,14 @@ const ProductInput: FC<ProductDetail> = ({
           name="price"
           value={product.price}     
           disabled
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
         />
       </div>
 
       <div className=" w-1/4">
         <label
           form="quantity"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-white"
         >
           จำนวน
         </label>
@@ -73,7 +73,7 @@ const ProductInput: FC<ProductDetail> = ({
           name="quantity"
           value={product.quantity}
           onChange={(e) => onChangeProduct(index, e)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          className="shadow-sm-light bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 text-white"
         />
       </div>
       <button
