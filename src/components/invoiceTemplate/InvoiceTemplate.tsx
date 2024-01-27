@@ -28,7 +28,7 @@ const InvoiceTemplate: FC<IInvoice> = ({ forwardRef, bill }) => {
             <img alt="panwimon" src={logo} />
           </div>
           <div className="text-2xl">ใบส่งของ</div>
-          <div>เลขที่ใบส่งของ {bill.bill_number ?? ''}</div>
+          <div>เลขที่ใบส่งของ {bill.bill_number}</div>
         </div>
         <div className="flex justify-between pb-1 border-b-2 px-2 mb-2 text-sm">
           <div>
