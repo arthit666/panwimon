@@ -11,7 +11,7 @@ const ProductList: FC = () => {
   const [productList, setProductList] = useState<Product[]>([]);
   const [loading,setLoading] = useState<boolean>(false)
 
-  const loadCustomerList = async () => {
+  const loadProductList = async () => {
     try {
       setLoading(true)
       getAllProduct().then((res: Product[]) => {
@@ -38,7 +38,7 @@ const ProductList: FC = () => {
           transition: Bounce,
         });
 
-        loadCustomerList();
+        loadProductList();
       });
     } catch (error) {
       console.log("error: ", error);
@@ -46,7 +46,7 @@ const ProductList: FC = () => {
   };
 
   useEffect(() => {
-    loadCustomerList();
+    loadProductList();
   }, []);
 
   return (

@@ -7,7 +7,9 @@ import { getAllCustomer } from "../../service/customer";
 import { getAllProduct } from "../../service/product";
 import { v4 as uuidv4 } from "uuid";
 import Spinner from "../../components/spinner/Spinner";
+import { queryBillByDate } from "../../service/bill";
 export interface Bill {
+  id?: string
   bill_number?: string;
   customer: Customer;
   car_name: string;
@@ -22,15 +24,13 @@ export interface Product {
   quantity?: number;
 }
 
-let lastInvoiceDate = "";
-let count = 0;
-
 const Bill: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { billPayload } = location.state || { billPayload: null };
   const [customerList, setCustomerList] = useState<Customer[]>([]);
   const [productList, setProductList] = useState<Product[]>([]);
+  const [billNumber, setBillNumber] = useState<String>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [bill, setBill] = useState<Bill>({
     customer: {
@@ -54,29 +54,45 @@ const Bill: FC = () => {
     try {
       setLoading(true);
       if (billPayload != null) {
-        count -= 1
         setBill(billPayload);
       }
       loadCustomerList();
       loadProductList();
+      loadBill();
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   }, []);
 
-  const generateInvoiceNumber = () => {
+  const loadBill = () => {
     const prefix = "INV";
     const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    queryBillByDate(currentDate)
+      .then((invoices: Bill[]) => {
+        if (invoices.length == 0) {
+          console.log('bill num',invoices.length)
+          return setBillNumber(`${prefix}-${currentDate}-${1}`);
+        } else {
+         let formattedCount = getBillNumber(invoices[invoices.length-1].bill_number ?? '')
+         console.log('bill num',(formattedCount ?? 0) + 1)
+          return setBillNumber(`${prefix}-${currentDate}-${(formattedCount ?? 0) + 1}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Error querying invoices by date:", error);
+      });
+  };
 
-    if (currentDate !== lastInvoiceDate) {
-      lastInvoiceDate = currentDate;
-      count = 1;
+  const getBillNumber = (bill_number: string): number | undefined => {
+    const matchResult = bill_number.match(/INV-\d{8}-(\d+)/);
+
+    if (matchResult && matchResult[1]) {
+      const invoiceCount = parseInt(matchResult[1], 10);
+      return invoiceCount;
     } else {
-      count += 1;
+      console.error("Invalid invoice number format");
     }
-    const formattedCount = count.toString().padStart(3, "0");
-    return `${prefix}-${currentDate}-${formattedCount}`;
   };
 
   const handleOnChangeCustomer = (
@@ -132,7 +148,7 @@ const Bill: FC = () => {
       state: {
         bill: {
           ...bill,
-          bill_number: generateInvoiceNumber(),
+          bill_number: billNumber,
           product_list: listBill,
         },
       },

@@ -15,7 +15,20 @@ const Sidebar: FC = () => {
                 className="flex-shrink-0 w-5 h-5 text-gray-400"
                 aria-hidden="true"
                 fill="currentColor"
-                viewBox="0 0 18 18"
+              >
+                <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+              </svg>
+              <span className="flex-1 ms-3 text-white">รายงาน</span>
+            </Link>
+            <Link
+              to="/create_bill"
+              className="flex items-center py-3 px-2 text-gray-900 rounded-lg hover:bg-gray-700 group"
+            >
+              <svg
+                className="flex-shrink-0 w-5 h-5 text-gray-400"
+                aria-hidden="true"
+                fill="currentColor"
               >
                 <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3.546l3.2 3.659a1 1 0 0 0 1.506 0L13.454 14H18a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-8 10H5a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Zm5-4H5a1 1 0 0 1 0-2h10a1 1 0 1 1 0 2Z" />
               </svg>

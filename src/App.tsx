@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductList from "./pages/products/ProductList";
 import ProductCreate from "./pages/products/ProductCreate";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 const App: FC = () => {
   const Layout = () => {
@@ -34,6 +35,10 @@ const App: FC = () => {
       children: [
         {
           path: "/",
+          element: <Dashboard />,
+        },
+        {
+          path: "/create_bill",
           element: <Bill />,
         },
         {
